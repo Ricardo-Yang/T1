@@ -8,18 +8,18 @@
   <style>
     :root {
       --bg: #f5f5f7;
-      --card-bg: #ffffff;
-      --border: #e5e5ea;
-      --text-main: #111111;
+      --text-main: #1d1d1f;
       --text-muted: #6e6e73;
+      --border: #e5e5ea;
       --link: #0070c9;
+      --accent: #0070c9;
     }
 
     * {
       box-sizing: border-box;
     }
 
-    body {
+    html, body {
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
@@ -29,172 +29,342 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    .page {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 32px 16px 64px;
-    }
-
-    header {
-      padding: 12px 0 32px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .site-title {
-      font-size: 28px;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-    }
-
-    .site-subtitle {
-      margin-top: 6px;
-      font-size: 14px;
-      color: var(--text-muted);
-      max-width: 540px;
+    body {
+      font-size: 16px;
       line-height: 1.6;
     }
 
-    nav {
-      margin-top: 18px;
+    /* 顶部固定头部 + 导航 */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(245, 245, 247, 0.96);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      z-index: 10;
+    }
+
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 18px 16px 16px;
+    }
+
+    .brand-row {
       display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* 顶部图标：灰底 + 黑字 Y2 */
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: #e5e5ea; /* 苹果风浅灰 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 600;
+      color: #1d1d1f;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      flex-shrink: 0;
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .site-title {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      margin: 0;
+    }
+
+    .site-subtitle {
+      margin: 0;
+      margin-top: 4px;
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 560px;
+    }
+
+    /* 顶部小卡片：作为简洁的“图片/模块” */
+    .hero-card {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      background: linear-gradient(135deg, #ffffff, #f5f5f7);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
       font-size: 13px;
     }
 
-    nav a {
+    .hero-title {
+      font-weight: 500;
+    }
+
+    .hero-desc {
       color: var(--text-muted);
-      text-decoration: none;
-      padding-bottom: 2px;
-      border-bottom: 1px solid transparent;
     }
 
-    nav a:hover {
+    .site-nav {
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-size: 13px;
+    }
+
+    .nav-link {
+      border: none;
+      background: none;
+      padding: 4px 0;
+      margin: 0;
+      font: inherit;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #d0d3da;
+    }
+
+    .nav-link:hover {
       color: var(--text-main);
-      border-color: var(--border);
     }
 
-    main {
-      margin-top: 32px;
+    .nav-link.active {
+      color: var(--text-main);
+      border-color: var(--text-main);
+    }
+
+    .nav-link.active .nav-dot {
+      background: var(--accent);
+    }
+
+    /* 主体内容：预留头部高度 + 适当间距 */
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 210px 16px 64px;
     }
 
     section {
-      margin-bottom: 40px;
-      padding-bottom: 24px;
+      display: none;
+      margin-bottom: 56px;
+      padding-bottom: 36px;
       border-bottom: 1px solid var(--border);
+    }
+
+    section.active {
+      display: block;
     }
 
     section:last-of-type {
       border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 32px;
     }
 
     .section-label {
-      font-size: 13px;
+      font-size: 12px;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       color: var(--text-muted);
-      margin-bottom: 8px;
+      margin-bottom: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0%, #e0ecff, #4c6fff);
     }
 
     h2 {
       font-size: 22px;
-      margin: 0 0 4px;
+      margin: 0 0 10px;
       font-weight: 600;
     }
 
     .section-desc {
-      font-size: 14px;
+      font-size: 15px;
       color: var(--text-muted);
-      margin: 0 0 16px;
-      line-height: 1.6;
-      max-width: 640px;
+      margin: 0 0 30px;
+      max-width: 660px;
     }
 
     h3 {
-      font-size: 17px;
-      margin: 24px 0 6px;
+      font-size: 18px;
+      margin: 32px 0 8px;
       font-weight: 500;
     }
 
-    .prompt-note {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin: 0 0 8px;
+    /* 第一条提示词略微缩小顶部间距 */
+    h3:first-of-type {
+      margin-top: 4px;
     }
 
+    .prompt-note {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0 0 12px;
+    }
+
+    /* 提示词区：无框线，正常正文，增大模块间距 */
     pre {
-      margin: 0 0 8px;
-      background: #0b1020;
-      color: #e5e7eb;
-      padding: 10px 12px;
-      border-radius: 10px;
-      font-size: 12px;
+      margin: 0 0 34px;
+      background: transparent;
+      color: var(--text-main);
+      padding: 0;
+      border-radius: 0;
+      border: none;
+      font-size: 15px;
       line-height: 1.7;
-      overflow-x: auto;
+      white-space: pre-wrap;
     }
 
     code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-        "Liberation Mono", "Courier New", monospace;
-      white-space: pre;
+      font-family: inherit;
     }
 
-    .footer {
-      margin-top: 40px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-      font-size: 12px;
-      color: var(--text-muted);
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
     }
 
     @media (max-width: 640px) {
       .site-title {
-        font-size: 22px;
+        font-size: 21px;
+      }
+      .site-subtitle {
+        font-size: 13px;
+      }
+      .hero-card {
+        margin-top: 12px;
       }
       h2 {
-        font-size: 19px;
+        font-size: 20px;
       }
       h3 {
-        font-size: 16px;
+        font-size: 17px;
+      }
+      .section-desc {
+        font-size: 14px;
+      }
+      pre {
+        font-size: 14px;
+      }
+      .page {
+        padding-top: 220px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <header>
-      <div class="site-title">YANG · ChatGPT 提示词笔记</div>
-      <div class="site-subtitle">
-        把高频场景做成模版，用的时候只改【括号】里的内容就行。
-        本页为极简风格静态网页，可以部署到 GitHub Pages/Netlify。
+  <!-- 顶部固定：标题 + 导航 + 小卡片 -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand-row">
+        <div class="brand-mark">Y</div>
+        <div class="title-block">
+          <h1 class="site-title">YANG · ChatGPT 提示词笔记</h1>
+          <p class="site-subtitle">
+            把高频场景做成模版，用的时候只改【括号】里的内容即可。极简、干净、适合长期维护。
+          </p>
+        </div>
       </div>
-      <nav>
-        <a href="#general">通用</a>
-        <a href="#learning">学习</a>
-        <a href="#reading">阅读总结</a>
-        <a href="#writing">写作</a>
-        <a href="#work">工作</a>
-        <a href="#code">编程</a>
-        <a href="#decision">决策</a>
-        <a href="#plan">计划</a>
-        <a href="#idea">创意</a>
-        <a href="#reflect">反思</a>
-        <a href="#meta">元提示</a>
+
+      <div class="hero-card">
+        <div class="hero-text">
+          <div class="hero-title">个人 Prompt Toolbox</div>
+          <div class="hero-desc">常用任务：学习、写作、工作、编程、决策。点击上方分类在下方切换不同模版。</div>
+        </div>
+      </div>
+
+      <nav class="site-nav">
+        <button class="nav-link active" data-section="general">
+          <span class="nav-dot"></span> 通用
+        </button>
+        <button class="nav-link" data-section="learning">
+          <span class="nav-dot"></span> 学习
+        </button>
+        <button class="nav-link" data-section="reading">
+          <span class="nav-dot"></span> 阅读总结
+        </button>
+        <button class="nav-link" data-section="writing">
+          <span class="nav-dot"></span> 写作 / 翻译
+        </button>
+        <button class="nav-link" data-section="work">
+          <span class="nav-dot"></span> 工作文档
+        </button>
+        <button class="nav-link" data-section="code">
+          <span class="nav-dot"></span> 编程 / 技术
+        </button>
+        <button class="nav-link" data-section="decision">
+          <span class="nav-dot"></span> 决策 / 思考
+        </button>
+        <button class="nav-link" data-section="plan">
+          <span class="nav-dot"></span> 计划 / 习惯
+        </button>
+        <button class="nav-link" data-section="idea">
+          <span class="nav-dot"></span> 创意
+        </button>
+        <button class="nav-link" data-section="reflect">
+          <span class="nav-dot"></span> 反思
+        </button>
+        <button class="nav-link" data-section="meta">
+          <span class="nav-dot"></span> 元提示
+        </button>
       </nav>
-    </header>
+    </div>
+  </header>
 
-    <main>
-      <!-- 通用 -->
-      <section id="general">
-        <div class="section-label">Core · General</div>
-        <h2>一、万能通用提示词</h2>
-        <p class="section-desc">
-          建议每次开始一个新任务，都先用一段“任务说明”，明确角色、目标、输出格式和风格。
-        </p>
+  <!-- 主体内容：每个 section 相当于一个“界面” -->
+  <main class="page">
+    <!-- 通用 -->
+    <section data-section="general" class="active">
+      <div class="section-label">
+        <span class="section-dot"></span> Core · General
+      </div>
+      <h2>通用提示词</h2>
+      <p class="section-desc">
+        每次开始一个新任务，都可以先用一段“任务说明”，明确角色、目标、输出格式和风格，让后面的回答更加稳定、可控。
+      </p>
 
-        <h3>0.1 通用任务说明模版</h3>
-        <p class="prompt-note">场景：任何任务的开局模版。</p>
-        <pre><code>你现在是一个【角色，例如：资深财务顾问 / 教学型助手 / 严谨的编辑】。
+      <h3>通用任务说明模版</h3>
+      <p class="prompt-note">场景：任何任务的开局模版。</p>
+      <pre><code>你现在是一个【角色，例如：资深财务顾问 / 教学型助手 / 严谨的编辑】。
 
 请帮我完成这个任务：
 【用 2–3 句话说明你想要什么：例如“帮我理解 XXX，并做一份学习计划”】
@@ -205,19 +375,21 @@
 3. 风格：整体语气【正式 / 口语 / 简洁 / 详细】。
 4. 深度：先给一个整体框架，再一步步展开，每一步都要有例子或类比。
 5. 如有不清晰的地方，你可以根据常识自行合理假设，不用反问我。</code></pre>
-      </section>
+    </section>
 
-      <!-- 学习 / 理解 -->
-      <section id="learning">
-        <div class="section-label">Learn · Concept</div>
-        <h2>二、学习 / 理解复杂概念</h2>
-        <p class="section-desc">
-          用来啃难概念、让模型当老师、出题纠错，做出“教 + 练 + 反馈”的闭环。
-        </p>
+    <!-- 学习 / 理解 -->
+    <section data-section="learning">
+      <div class="section-label">
+        <span class="section-dot"></span> Learn · Concept
+      </div>
+      <h2>学习 / 理解复杂概念</h2>
+      <p class="section-desc">
+        用来啃难概念、让模型当老师、出题纠错，做出“教 + 练 + 反馈”的闭环，让学习更加系统。
+      </p>
 
-        <h3>1.1 拆解一个概念 + 举例 + 对比</h3>
-        <p class="prompt-note">场景：快速搞懂一个新概念并区分相近概念。</p>
-        <pre><code>请用“教新手”的方式，帮我理解【概念，例如：通货膨胀 / 贴现率 / PLC 扫描周期】。
+      <h3>拆解一个概念 + 举例 + 对比</h3>
+      <p class="prompt-note">场景：快速搞懂一个新概念并区分相近概念。</p>
+      <pre><code>请用“教新手”的方式，帮我理解【概念，例如：通货膨胀 / 贴现率 / PLC 扫描周期】。
 
 要求：
 1. 先用 1–2 句话给出“最精简”的定义。
@@ -226,9 +398,9 @@
 4. 选 2–3 个容易混淆的概念（如果有），做一个对比表：列出“相同点 / 不同点 / 适用场景”。
 5. 最后给我 3 个自测问题，用来检查我是不是真的理解了。</code></pre>
 
-        <h3>1.2 让模型当你的私人老师（分阶段教学）</h3>
-        <p class="prompt-note">场景：系统学习一门新学科。</p>
-        <pre><code>你现在是我的【学科，例如：宏观经济 / 股票投资 / 电气工程基础】私人老师。
+      <h3>让模型当你的私人老师（分阶段教学）</h3>
+      <p class="prompt-note">场景：系统学习一门新学科。</p>
+      <pre><code>你现在是我的【学科，例如：宏观经济 / 股票投资 / 电气工程基础】私人老师。
 
 我的基础是：【零基础 / 只懂一点皮毛 / 有工作经验】。
 
@@ -241,9 +413,9 @@
 3. 给出一套【7 天】的学习计划：每天学什么、练什么，大概需要多久。
 4. 每天末尾设计 3–5 个小题目，让我自测。</code></pre>
 
-        <h3>1.3 问答式辅导 + 纠错</h3>
-        <p class="prompt-note">场景：做类似“刷题 + 讲解”的自适应练习。</p>
-        <pre><code>接下来请你用“出题 + 纠错”的方式教我【主题】。
+      <h3>问答式辅导 + 纠错</h3>
+      <p class="prompt-note">场景：做类似“刷题 + 讲解”的自适应练习。</p>
+      <pre><code>接下来请你用“出题 + 纠错”的方式教我【主题】。
 
 规则：
 1. 你先问我一个难度适中、与【主题】相关的问题。
@@ -254,19 +426,21 @@
 3. 根据我的表现，逐步提高或降低难度。
 4. 整个过程像自适应练习一样进行。
 （现在请先出第 1 题，并说明考察的知识点。）</code></pre>
-      </section>
+    </section>
 
-      <!-- 阅读 / 总结 -->
-      <section id="reading">
-        <div class="section-label">Read · Notes</div>
-        <h2>三、阅读 / 总结 / 做笔记</h2>
-        <p class="section-desc">
-          处理长文、报告、论文、聊天记录，变成结构化笔记与逻辑图。
-        </p>
+    <!-- 阅读 / 总结 -->
+    <section data-section="reading">
+      <div class="section-label">
+        <span class="section-dot"></span> Read · Notes
+      </div>
+      <h2>阅读 / 总结 / 做笔记</h2>
+      <p class="section-desc">
+        用于处理长文、报告、论文、聊天记录，把碎片信息变成结构化的知识与可复用的笔记。
+      </p>
 
-        <h3>2.1 长文总结 + 多层级笔记</h3>
-        <p class="prompt-note">场景：阅读论文、长文章、报告时做学习型笔记。</p>
-        <pre><code>下面是我要阅读的内容（可能比较长）： 
+      <h3>长文总结 + 多层级笔记</h3>
+      <p class="prompt-note">场景：阅读论文、长文章、报告时做学习型笔记。</p>
+      <pre><code>下面是我要阅读的内容（可能比较长）： 
 【粘贴文章 / 报告 / 对话】
 
 请帮我做“学习型笔记”，要求：
@@ -275,28 +449,30 @@
 3. 用表格列出：每个关键概念 → 一句话解释 → 文中对应的重要结论。
 4. 最后给我 5 个讨论问题，帮助我在之后继续思考和延伸。</code></pre>
 
-        <h3>2.2 把逻辑结构画出来</h3>
-        <p class="prompt-note">场景：看一段观点/分析，想搞清楚逻辑链条。</p>
-        <pre><code>请帮我分析下面这段内容的逻辑结构：
+      <h3>把逻辑结构画出来</h3>
+      <p class="prompt-note">场景：看一段观点/分析，想搞清楚逻辑链条。</p>
+      <pre><code>请帮我分析下面这段内容的逻辑结构：
 【粘贴内容】
 
 输出：
 1. 用“因果链”的形式写出：原因 → 过程 → 结果 → 影响。
 2. 如果逻辑里有前提假设，请单独列出来，并指出是否合理。
 3. 用简单的项目符号画出“逻辑流程图”（用文字模拟流程图即可）。</code></pre>
-      </section>
+    </section>
 
-      <!-- 写作 / 翻译 -->
-      <section id="writing">
-        <div class="section-label">Write · Edit</div>
-        <h2>四、写作 / 改写 / 翻译</h2>
-        <p class="section-desc">
-          先自己写，再让模型帮你改结构、改表达、改逻辑，是最稳妥的用法。
-        </p>
+    <!-- 写作 / 翻译 -->
+    <section data-section="writing">
+      <div class="section-label">
+        <span class="section-dot"></span> Write · Edit
+      </div>
+      <h2>写作 / 改写 / 翻译</h2>
+      <p class="section-desc">
+        先自己写，再让模型帮你改结构、改表达、改逻辑，让输出既像你自己的风格，又更专业。
+      </p>
 
-        <h3>3.1 提升一段文字的质量（保持原意）</h3>
-        <p class="prompt-note">场景：简历、汇报、电邮等文本优化。</p>
-        <pre><code>下面是一段我自己写的内容，用于【场景，例如：求职简历 / 工作汇报 / 电邮】：
+      <h3>提升一段文字的质量（保持原意）</h3>
+      <p class="prompt-note">场景：简历、汇报、电邮等文本优化。</p>
+      <pre><code>下面是一段我自己写的内容，用于【场景，例如：求职简历 / 工作汇报 / 电邮】：
 
 【粘贴原文】
 
@@ -306,9 +482,9 @@
 3. 指出你做了哪些主要修改（用要点列出：例如“语气更专业”“逻辑顺序调整”等）。
 4. 如果有明显信息缺失，请列出建议我补充的点，而不是自己瞎编。</code></pre>
 
-        <h3>3.2 先定结构再扩写</h3>
-        <p class="prompt-note">场景：写长文 / 总结 / 项目复盘时先要大纲。</p>
-        <pre><code>我想写一篇关于【主题，例如：我这一年的成长 / 某个项目总结 / 某个知识点】的文章，目标读者是【对象】，大概【字数】。
+      <h3>先定结构再扩写</h3>
+      <p class="prompt-note">场景：写长文 / 总结 / 项目复盘时先要大纲。</p>
+      <pre><code>我想写一篇关于【主题，例如：我这一年的成长 / 某个项目总结 / 某个知识点】的文章，目标读者是【对象】，大概【字数】。
 
 请：
 1. 根据目的和读者，先帮我设计一个结构清晰的大纲（3–5 个一级标题，每个 2–3 个要点）。
@@ -316,9 +492,9 @@
 3. 在我确认大纲后，再按大纲逐段帮我扩写。
 （先不要直接写全文，请先给大纲。）</code></pre>
 
-        <h3>3.3 多种语气版本</h3>
-        <p class="prompt-note">场景：同一内容，用不同语气对不同对象说。</p>
-        <pre><code>下面这段话请帮我改写成 3 个版本：正式商务 / 朋友聊天式 / 简洁干练式。
+      <h3>多种语气版本</h3>
+      <p class="prompt-note">场景：同一内容，用不同语气对不同对象说。</p>
+      <pre><code>下面这段话请帮我改写成 3 个版本：正式商务 / 朋友聊天式 / 简洁干练式。
 
 原文：
 【粘贴内容】
@@ -327,9 +503,9 @@
 1. 不要改变事实信息。
 2. 仅调整语气、措辞和长短句的节奏。</code></pre>
 
-        <h3>3.4 保留语气的翻译（中 ↔ 英）</h3>
-        <p class="prompt-note">场景：求职邮件、工作汇报、学术写作等中英互译。</p>
-        <pre><code>请把下面这段【中文/英文】翻译成【目标语言】，场景是【求职邮件 / 工作汇报 / 学术写作 / 轻松聊天】。
+      <h3>保留语气的翻译（中 ↔ 英）</h3>
+      <p class="prompt-note">场景：求职邮件、工作汇报、学术写作等中英互译。</p>
+      <pre><code>请把下面这段【中文/英文】翻译成【目标语言】，场景是【求职邮件 / 工作汇报 / 学术写作 / 轻松聊天】。
 
 原文：
 【粘贴内容】
@@ -338,19 +514,21 @@
 1. 保留原文的语气和礼貌程度。
 2. 适当本地化表达，不要逐字直译。
 3. 如果某些地方原文表达不够自然，可以顺手润色一下，并列出你做的主要调整。</code></pre>
-      </section>
+    </section>
 
-      <!-- 工作 -->
-      <section id="work">
-        <div class="section-label">Work · Docs</div>
-        <h2>五、工作 / 文档 / 报告</h2>
-        <p class="section-desc">
-          项目复盘、工作总结、会议纪要、简历优化，直接变成日常工作流。
-        </p>
+    <!-- 工作 -->
+    <section data-section="work">
+      <div class="section-label">
+        <span class="section-dot"></span> Work · Docs
+      </div>
+      <h2>工作 / 文档 / 报告</h2>
+      <p class="section-desc">
+        项目复盘、工作总结、会议纪要、简历优化，把日常工作内容全部模板化。
+      </p>
 
-        <h3>4.1 项目复盘 / 工作总结</h3>
-        <p class="prompt-note">场景：写项目复盘、月度/年度总结。</p>
-        <pre><code>我想写一篇【项目复盘 / 月度总结 / 年度总结】，对象是【领导 / 同事 / HR】，内容大致如下：
+      <h3>项目复盘 / 工作总结</h3>
+      <p class="prompt-note">场景：写项目复盘、月度/年度总结。</p>
+      <pre><code>我想写一篇【项目复盘 / 月度总结 / 年度总结】，对象是【领导 / 同事 / HR】，内容大致如下：
 【简单描述项目或这一段时间做的事】
 
 请帮我：
@@ -358,9 +536,9 @@
 2. 在每一部分下帮我列出可以写的要点提示（用问题形式提醒我补充信息）。
 3. 在我补充完信息后，再帮我生成可直接使用的一篇完整文字。</code></pre>
 
-        <h3>4.2 会议纪要 / 讨论整理</h3>
-        <p class="prompt-note">场景：把零散会议记录整理成正式纪要。</p>
-        <pre><code>下面是我们开会时的零散记录：
+      <h3>会议纪要 / 讨论整理</h3>
+      <p class="prompt-note">场景：把零散会议记录整理成正式纪要。</p>
+      <pre><code>下面是我们开会时的零散记录：
 【粘贴会议记录或聊天记录】
 
 请整理成一份结构化的会议纪要：
@@ -369,9 +547,9 @@
 3. 已形成的决策 / 结论。
 4. 待办事项（每条包含：负责人、deadline、产出物）。</code></pre>
 
-        <h3>4.3 简历优化提示词</h3>
-        <p class="prompt-note">场景：针对某一段经历做 STAR + 量化优化。</p>
-        <pre><code>下面是我简历中的一段经历：
+      <h3>简历优化提示词</h3>
+      <p class="prompt-note">场景：针对某一段经历做 STAR + 量化优化。</p>
+      <pre><code>下面是我简历中的一段经历：
 【粘贴经历】
 
 请按“STAR 法 + 可量化结果”帮我优化：
@@ -379,19 +557,21 @@
 2. 用 STAR（情境、任务、行动、结果）的结构帮我重写这段经历。
 3. 尽量用数字、规模、效率提升等方式把结果量化。
 4. 示例语言保持【中文 / 英文】，风格偏【正式 / 简洁】。</code></pre>
-      </section>
+    </section>
 
-      <!-- 编程 -->
-      <section id="code">
-        <div class="section-label">Code · Tech</div>
-        <h2>六、编程 / 技术类</h2>
-        <p class="section-desc">
-          即使没有基础，也可以用自然语言描述需求，让模型写示例代码、解释报错。
-        </p>
+    <!-- 编程 -->
+    <section data-section="code">
+      <div class="section-label">
+        <span class="section-dot"></span> Code · Tech
+      </div>
+      <h2>编程 / 技术类</h2>
+      <p class="section-desc">
+        即使没有基础，也可以用自然语言描述需求，让模型写示例代码、解释报错。
+      </p>
 
-        <h3>5.1 自然语言 → 示例代码</h3>
-        <p class="prompt-note">场景：用中文描述想要的功能，让模型写代码。</p>
-        <pre><code>我在学【语言/技术栈，例如 Python / C / PLC 编程】，现在想实现这个功能：
+      <h3>自然语言 → 示例代码</h3>
+      <p class="prompt-note">场景：用中文描述想要的功能，让模型写代码。</p>
+      <pre><code>我在学【语言/技术栈，例如 Python / C / PLC 编程】，现在想实现这个功能：
 【用自然语言描述你想做什么】
 
 请：
@@ -400,9 +580,9 @@
 3. 用通俗语言解释这段代码的整体思路和关键语句。
 4. 提出 2–3 个小练习，帮助我在这个基础上改进或扩展功能。</code></pre>
 
-        <h3>5.2 让模型帮你读代码</h3>
-        <p class="prompt-note">场景：看不懂别人代码时。</p>
-        <pre><code>下面是一段我看不太懂的代码（语言：【语言】）：
+      <h3>让模型帮你读代码</h3>
+      <p class="prompt-note">场景：看不懂别人代码时。</p>
+      <pre><code>下面是一段我看不太懂的代码（语言：【语言】）：
 
 【粘贴代码】
 
@@ -412,9 +592,9 @@
 3. 指出潜在的问题或风险（如果有）。
 4. 提一个“如何改写得更清晰”的建议，并给一个改写示例。</code></pre>
 
-        <h3>5.3 bug 分析提示词</h3>
-        <p class="prompt-note">场景：代码报错，想快速定位和修复。</p>
-        <pre><code>我在运行下面这段代码时遇到错误：
+      <h3>bug 分析提示词</h3>
+      <p class="prompt-note">场景：代码报错，想快速定位和修复。</p>
+      <pre><code>我在运行下面这段代码时遇到错误：
 
 代码：
 【粘贴代码】
@@ -427,19 +607,21 @@
 2. 用新手能理解的方式解释错误的根本原因。
 3. 给出修改后的版本，并标出改动点。
 4. 告诉我今后如何避免类似错误。</code></pre>
-      </section>
+    </section>
 
-      <!-- 决策 -->
-      <section id="decision">
-        <div class="section-label">Decide · Think</div>
-        <h2>七、思考 / 决策 / 方案对比</h2>
-        <p class="section-desc">
-          把模型当理性顾问：帮你拆维度、做方案对比、找薄弱假设。
-        </p>
+    <!-- 决策 -->
+    <section data-section="decision">
+      <div class="section-label">
+        <span class="section-dot"></span> Decide · Think
+      </div>
+      <h2>思考 / 决策 / 方案对比</h2>
+      <p class="section-desc">
+        把模型当理性顾问：帮你拆维度、做方案对比、找薄弱假设。
+      </p>
 
-        <h3>6.1 系统决策分析模版</h3>
-        <p class="prompt-note">场景：多个方案之间做选择。</p>
-        <pre><code>我现在需要在几个选项之间做选择，主题是：【例如 换工作 / 学什么专业 / 选择哪种投资方式】。
+      <h3>系统决策分析模版</h3>
+      <p class="prompt-note">场景：多个方案之间做选择。</p>
+      <pre><code>我现在需要在几个选项之间做选择，主题是：【例如 换工作 / 学什么专业 / 选择哪种投资方式】。
 
 我的备选方案有：
 A. 【方案 A】
@@ -452,9 +634,9 @@ C. 【方案 C】（如果有）
 3. 提出你认为我容易忽略的隐性成本或风险。
 4. 不需要直接替我做决定，但可以给一套“如何做出适合自己的选择”的步骤建议。</code></pre>
 
-        <h3>6.2 质疑我的想法（反向检验）</h3>
-        <p class="prompt-note">场景：对自己的想法做压力测试。</p>
-        <pre><code>我现在有一个想法 / 结论：
+      <h3>质疑我的想法（反向检验）</h3>
+      <p class="prompt-note">场景：对自己的想法做压力测试。</p>
+      <pre><code>我现在有一个想法 / 结论：
 【写下你的观点或计划】
 
 请你扮演“温和但严格的反对者”，帮我：
@@ -462,19 +644,21 @@ C. 【方案 C】（如果有）
 2. 针对每个薄弱点，给出可能出问题的情景和后果。
 3. 提出一些我可以收集的证据或数据，用来验证这些假设。
 4. 在以上基础上，帮我稍微优化这个想法，使它更稳健一些。</code></pre>
-      </section>
+    </section>
 
-      <!-- 计划 / 习惯 -->
-      <section id="plan">
-        <div class="section-label">Plan · Habit</div>
-        <h2>八、规划 / 学习计划 / 习惯</h2>
-        <p class="section-desc">
-          学什么、怎么学、多长时间学完，可以交给模型先帮你倒推拆解。
-        </p>
+    <!-- 计划 / 习惯 -->
+    <section data-section="plan">
+      <div class="section-label">
+        <span class="section-dot"></span> Plan · Habit
+      </div>
+      <h2>规划 / 学习计划 / 习惯</h2>
+      <p class="section-desc">
+        学什么、怎么学、多长时间学完，可以交给模型先帮你倒推拆解，再落成具体计划。
+      </p>
 
-        <h3>7.1 制定学习计划</h3>
-        <p class="prompt-note">场景：21 天/3 个月系统学一门新东西。</p>
-        <pre><code>我想在【时间，例如 21 天 / 3 个月】内，在每天【1–2 小时】的时间里，系统学习【主题，例如：宏观经济 / 股票入门 / PLC / 英语口语】。
+      <h3>制定学习计划</h3>
+      <p class="prompt-note">场景：21 天/3 个月系统学一门新东西。</p>
+      <pre><code>我想在【时间，例如 21 天 / 3 个月】内，在每天【1–2 小时】的时间里，系统学习【主题，例如：宏观经济 / 股票入门 / PLC / 英语口语】。
 
 我的基础是：【简单说明自己的水平】。
 
@@ -484,46 +668,50 @@ C. 【方案 C】（如果有）
 3. 制定一个按天/按周的学习计划表：每天/每周的任务、建议时长、对应资源类型（书/视频/练习）。
 4. 给出一个“复盘模版”，告诉我每周结束时应该怎么检查自己的进度和理解。</code></pre>
 
-        <h3>7.2 倒推目标</h3>
-        <p class="prompt-note">场景：先写目标，再拆里程碑和行动。</p>
-        <pre><code>我的目标是：【写清楚，例如 1 年内找到测试工程师职位 / 半年内能看懂财报 / 3 个月内体重增加 5kg】。
+      <h3>倒推目标</h3>
+      <p class="prompt-note">场景：先写目标，再拆里程碑和行动。</p>
+      <pre><code>我的目标是：【写清楚，例如 1 年内找到测试工程师职位 / 半年内能看懂财报 / 3 个月内体重增加 5kg】。
 
 请帮我：
 1. 从目标倒推，拆成 3–5 个关键里程碑（时间节点 + 能力/成果）。
 2. 每个里程碑下，列出必须完成的行动（习得的技能 / 必须做的项目 / 可验证指标）。
 3. 提出可能阻碍我完成这些里程碑的风险，并给几个应对策略。</code></pre>
-      </section>
+    </section>
 
-      <!-- 创意 -->
-      <section id="idea">
-        <div class="section-label">Idea · Brainstorm</div>
-        <h2>九、创意 / 头脑风暴</h2>
-        <p class="section-desc">
-          命名、活动、功能、品牌，先大规模发散，再收敛总结规律。
-        </p>
+    <!-- 创意 -->
+    <section data-section="idea">
+      <div class="section-label">
+        <span class="section-dot"></span> Idea · Brainstorm
+      </div>
+      <h2>创意 / 头脑风暴</h2>
+      <p class="section-desc">
+        命名、活动、功能、品牌，先大规模发散，再收敛总结规律，形成自己的“创意库”。
+      </p>
 
-        <h3>8.1 批量生成创意 + 分类</h3>
-        <p class="prompt-note">场景：店名、课程名、活动方案、功能点等。</p>
-        <pre><code>我需要围绕【主题，例如：店铺名字 / 课程名字 / 活动方案 / 产品功能】进行头脑风暴。
+      <h3>批量生成创意 + 分类</h3>
+      <p class="prompt-note">场景：店名、课程名、活动方案、功能点等。</p>
+      <pre><code>我需要围绕【主题，例如：店铺名字 / 课程名字 / 活动方案 / 产品功能】进行头脑风暴。
 
 请：
 1. 先帮我明确约束条件（例如目标人群、风格、长度限制等）。
 2. 在此基础上，给我至少【20】个创意，并按【风格/定位】分类展示（用表格）。
 3. 每个创意后附一句话说明它的定位或亮点。
 4. 最后根据这些创意，总结出 3–5 条命名/设计的“潜在规律”。</code></pre>
-      </section>
+    </section>
 
-      <!-- 反思 -->
-      <section id="reflect">
-        <div class="section-label">Reflect · Self</div>
-        <h2>十、个人反思 / 元认知</h2>
-        <p class="section-desc">
-          把脑子里的糊糊拆成“事实–想法–情绪”，再找新的视角和行动。
-        </p>
+    <!-- 反思 -->
+    <section data-section="reflect">
+      <div class="section-label">
+        <span class="section-dot"></span> Reflect · Self
+      </div>
+      <h2>个人反思 / 元认知</h2>
+      <p class="section-desc">
+        把脑子里的糊糊拆成“事实–想法–情绪”，再找新的视角和行动方案，帮自己冷静下来。
+      </p>
 
-        <h3>9.1 梳理一件事：事实-想法-感受</h3>
-        <p class="prompt-note">场景：遇到困扰，想理清楚自己到底在想什么。</p>
-        <pre><code>我想梳理一件让我有点困扰的事情：
+      <h3>梳理一件事：事实 · 想法 · 感受</h3>
+      <p class="prompt-note">场景：遇到困扰，想理清楚自己到底在想什么。</p>
+      <pre><code>我想梳理一件让我有点困扰的事情：
 
 【简要描述发生了什么】
 
@@ -532,19 +720,21 @@ C. 【方案 C】（如果有）
 2. 帮我识别我的想法里是否有典型的“思维偏差”（如果有，请简单说明是什么、为什么）。
 3. 提出 3–5 个更平衡、更加全面的替代性看法（不是说服我，而是给我更多视角）。
 4. 给一个简单的行动建议：接下来 1–2 步，我可以做什么。</code></pre>
-      </section>
+    </section>
 
-      <!-- 元提示 -->
-      <section id="meta">
-        <div class="section-label">Meta · Answer</div>
-        <h2>十一、元提示词：让回答更好用</h2>
-        <p class="section-desc">
-          给模型“回答规范”，让任何问题的输出都更结构化、可复用。
-        </p>
+    <!-- 元提示 -->
+    <section data-section="meta">
+      <div class="section-label">
+        <span class="section-dot"></span> Meta · Answer
+      </div>
+      <h2>元提示词：让回答更好用</h2>
+      <p class="section-desc">
+        给模型“回答规范”，让任何问题的输出都有概览、大纲、展开和自查，方便复用。
+      </p>
 
-        <h3>10.1 要求“先给框架，再展开”和“自查”</h3>
-        <p class="prompt-note">场景：希望回答都有概览 + 大纲 + 展开 + 自查。</p>
-        <pre><code>请按以下流程回答我的任何问题：
+      <h3>要求“先给框架，再展开”和“自查”</h3>
+      <p class="prompt-note">场景：希望回答都有概览 + 大纲 + 展开 + 自查。</p>
+      <pre><code>请按以下流程回答我的任何问题：
 
 1. 先给一个不超过 5 行的“结论概览”（用列表）。
 2. 再给出一个结构化的大纲（1、1.1、1.2 的形式）。
@@ -553,13 +743,33 @@ C. 【方案 C】（如果有）
 
 接下来，我的问题是：
 【写上你的问题】</code></pre>
-      </section>
-    </main>
+    </section>
+  </main>
 
-    <div class="footer">
-      本页为静态极简网页，可以直接部署到 GitHub Pages 或 Netlify。<br>
-      你可以自由增删提示词，或复制本文件改成自己的版本。
-    </div>
-  </div>
+  <script>
+    // 简单的“多界面切换”：点击目录按钮，显示对应 section
+    document.addEventListener('DOMContentLoaded', function () {
+      const links = document.querySelectorAll('.nav-link');
+      const sections = document.querySelectorAll('section[data-section]');
+
+      function showSection(name) {
+        sections.forEach(sec => {
+          sec.classList.toggle('active', sec.dataset.section === name);
+        });
+        window.scrollTo(0, 0);
+      }
+
+      links.forEach(link => {
+        link.addEventListener('click', () => {
+          const target = link.dataset.section;
+          links.forEach(l => l.classList.toggle('active', l === link));
+          showSection(target);
+        });
+      });
+
+      const first = links[0];
+      if (first) first.click();
+    });
+  </script>
 </body>
 </html>
